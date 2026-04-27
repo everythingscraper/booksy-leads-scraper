@@ -1,47 +1,56 @@
-# Booksy Leads Scraper — Beauty & Wellness Business Contact Data (Apify Actor)
+# Booksy Leads Scraper (Apify Actor)
 
-Scrape **[Booksy](https://booksy.com)** business profiles at scale: business names, addresses, **phone numbers**, **emails**, **social media** links, ratings, review counts, and service categories. Built for B2B lead generation across barbers, hair salons, nail technicians, spas, beauty professionals, and wellness businesses.
+Turn any **[Booksy](https://booksy.com)** search URL into a CSV of beauty- and wellness-business leads — names, addresses, **phone numbers**, **emails**, **websites**, **social handles**, ratings, review counts, and service categories. Built for B2B prospecting into barbers, salons, nail techs, spas, lash & brow studios, massage therapists, and the long tail of independent operators.
 
-> 👉 Run it on Apify (no install): **[apify.com/seo-scraper/booksy-leads-scraper](https://apify.com/seo-scraper/booksy-leads-scraper)**
+Apify Actor 👉 **https://apify.com/seo-scraper/booksy-leads-scraper**
 
-This repository contains a minimal **Python example** showing how to call the deployed Actor through the Apify API and pull lead records.
+This repo is a **Python lead-gen example**: one search URL → `leads.csv` ready to drop into Clay, Apollo, Lemlist, Instantly, HubSpot, or your CRM of choice.
 
-## What this Booksy scraper extracts
+## The lead-gen playbook
 
-| Field | Description |
+1. Pick a **service** on `booksy.com` (e.g. `haircut-beard`, `eyelash-extensions`, `manicure`).
+2. Pick a **city** (e.g. Newport Beach, Miami, Austin).
+3. Copy the search URL.
+4. Run this scraper — get a CSV of every public business profile that matched.
+5. Push the CSV into your outreach tool.
+
+That's the whole workflow.
+
+## What ships in each lead
+
+| Column | Field |
 |---|---|
-| `url` | Direct Booksy profile URL |
-| `name` | Official business name |
-| `address` | Full address (street, city, ZIP) |
-| `phone` | Primary contact phone number |
-| `email` | Public business email when listed |
-| `website` | Business website link |
-| `socialMedia` | Instagram / Facebook / TikTok handles |
-| `rating` | Average star rating |
-| `reviewsCount` | Total reviews on Booksy |
-| `category` | Booksy service category (barber, salon, spa, etc.) |
+| Business name | `name` |
+| Address (street, city, ZIP) | `address` |
+| Phone | `phone` |
+| Email (if listed) | `email` |
+| Website | `website` |
+| Instagram / Facebook / TikTok | `socialMedia` |
+| Star rating | `rating` |
+| Review count | `reviewsCount` |
+| Booksy category | `category` |
+| Profile URL | `url` |
 
-## Quick start — Python example
+## Quick start
 
 ```bash
 git clone https://github.com/everythingscraper/booksy-leads-scraper.git
 cd booksy-leads-scraper
 pip install -r requirements.txt
-export APIFY_TOKEN=your_apify_token   # https://console.apify.com/settings/integrations
-python main.py
+APIFY_TOKEN=your_token python main.py
 ```
 
-`main.py` scrapes 10 barber leads from Newport Beach and prints name, phone, rating, address per result.
+`main.py` scrapes 10 barber leads from Newport Beach and writes them to `leads.csv` — drop into Clay or Lemlist as-is.
 
-## How to scrape Booksy — input options
+## Input options
 
-- **`startUrls`** — array of Booksy search-results URLs. Visit booksy.com, run a search by service + location, copy the URL. Example: `https://booksy.com/en-us/s/haircut-beard/102522_newport-beach`.
-- **`resultsToScrape`** — leads per URL (1–1000, default 50).
-- **`proxyConfiguration`** — residential proxies recommended for reliability.
+- 🔗 `startUrls` — array of Booksy search URLs (`https://booksy.com/en-us/s/<service>/<city-id>_<city>`).
+- 🔢 `resultsToScrape` — leads per URL (1–1,000, default 50).
+- 🌐 `proxyConfiguration` — residential recommended.
 
-Full input schema: **[Input tab on Apify](https://apify.com/seo-scraper/booksy-leads-scraper/input-schema)**.
+Schema: **[Input tab](https://apify.com/seo-scraper/booksy-leads-scraper/input-schema)**.
 
-## Sample output
+## Sample row
 
 ```json
 {
@@ -59,41 +68,53 @@ Full input schema: **[Input tab on Apify](https://apify.com/seo-scraper/booksy-l
 }
 ```
 
-Datasets export as **JSON, CSV, Excel, HTML, or XML** — push directly into your CRM or cold-email tool.
+Apify Storage exports as **JSON · CSV · Excel · HTML · XML** — pipe directly into your outreach stack.
 
-## How much does it cost to scrape Booksy?
+## Pricing
 
-Pay-per-result: **$2.00 per 1,000 leads**. The Apify Free plan ($5 platform credit) covers ≈ 2,500 Booksy leads. The Starter plan ($49/mo) covers ≈ 24,500 leads. Costs scale linearly.
+**$2.00 per 1,000 leads.**
+
+| Plan | ≈ Leads / month |
+|---|---|
+| Apify Free ($5 credit) | ~2,500 |
+| Starter ($49/mo) | ~24,500 |
+| Scale ($499/mo) | ~249,500 |
+
+That's roughly **$0.002 per qualified, contactable lead** — orders of magnitude cheaper than typical lead-list vendors.
+
+## Who uses this
+
+- 📞 **Cold-call agencies** — daily lead drops by city + service
+- 💸 **POS / SaaS sales teams** targeting independent salons & barbers
+- 📧 **Cold-email infra** (Lemlist, Instantly, Smartlead) — pre-warmed CSV imports
+- 🛒 **Beauty-supply distributors** — territory-by-territory prospecting
+- 🤝 **Booking-platform competitors** — full-market mapping
 
 ## FAQ
 
-**Does Booksy have an official API?**
-No public B2C lead API. This Actor is the practical route for prospecting beauty / wellness businesses listed on Booksy.
+**Is there a Booksy lead API?** No public one. Booksy is the merchant's primary marketing surface, so the contact info on their public profile is usually accurate and current.
 
-**Which countries does Booksy cover?**
-Booksy operates strongest in the US, UK, Poland, Brazil, and South Africa. Any Booksy search URL works as a start URL.
+**Which countries?** Booksy is strongest in the **US, UK, Poland, Brazil, and South Africa**. Any Booksy search URL works as a `startUrl`.
 
-**How fresh are phone numbers and emails?**
-Pulled live each run. Booksy is the merchant's primary booking surface, so contact info is usually accurate and current.
+**How fresh is the data?** Live every run — phone numbers and emails are pulled at request time.
 
-**Can I scrape multiple service types in one run?**
-Yes — pass multiple search URLs in `startUrls` (e.g. one for haircut+beard, one for nail-tech, one for massage).
+**Can I run multiple service types in one job?** Yes — pass multiple `startUrls` (e.g. one for haircut+beard, one for nails, one for massage).
 
-**Can I integrate the leads into HubSpot / Pipedrive / Lemlist / Instantly / Clay?**
-Yes — pipe results via Apify's **[webhooks](https://docs.apify.com/platform/integrations/webhooks)** or **[Make](https://apify.com/integrations/make)** / **[Zapier](https://apify.com/integrations/zapier)** integrations. CSV export drops straight into Clay / Apollo / Lemlist.
+**Does it dedupe across runs?** Within a run, yes (by Booksy profile URL). Across runs, dedupe in your CRM — Booksy URLs are stable IDs.
 
-**Need a custom field, a different geo, or a dedicated lead-gen pipeline?**
-Open an issue or contact us via the [Apify Actor page](https://apify.com/seo-scraper/booksy-leads-scraper).
+**Integrations?** Webhook on dataset-created, plus first-party Make / Zapier / n8n. CSV exports drop straight into Clay, Apollo, Lemlist, Instantly, Smartlead.
 
-## Other Apify Actors by everythingscraper
+## Other Apify Actors
 
-- 📊 **[Moz Domain Authority Checker](https://github.com/everythingscraper/moz-domain-authority-checker)** — DA / PA / backlinks for SEO audits
-- 🏠 **[Airbnb Scraper](https://github.com/everythingscraper/airbnb-scraper)** — STR metrics, ADR, RevPAR
-- 🏨 **[Trip.com Hotel Scraper](https://github.com/everythingscraper/trip-hotel-scraper)** — hotel pricing across 51 countries
+- 📊 [Moz Domain Authority Checker](https://github.com/everythingscraper/moz-domain-authority-checker)
+- 🏢 [LoopNet Scraper](https://github.com/everythingscraper/loopnet-scraper)
+- 🏠 [Airbnb Scraper](https://github.com/everythingscraper/airbnb-scraper)
+- 🏨 [Trip.com Hotel Scraper](https://github.com/everythingscraper/trip-hotel-scraper)
+- 🏖️ [Traveloka Hotel Scraper](https://github.com/everythingscraper/traveloka-hotel-scraper)
 
-## Is it legal to scrape Booksy?
+## Legality
 
-This Actor extracts only publicly listed business information — names, addresses, phone numbers, websites, and social handles that businesses themselves have published on Booksy as a marketing surface. It does not access user accounts, bookings, or private customer data. Personal data may still be subject to the GDPR (EU) and similar laws — use leads only for legitimate B2B outreach and consult your lawyers if unsure.
+This Actor extracts only publicly listed business information that operators themselves publish on Booksy as marketing. No customer accounts, bookings, or private user data are accessed. Personal data within scraped leads remains subject to GDPR (EU/UK) and similar laws — use leads only for legitimate B2B outreach and consult counsel where relevant.
 
 ## License
 
